@@ -183,3 +183,13 @@
 #### Тогда
 - Закрывается окно проводника
 - Система отображает сообщение об ошибке и список поддерживаемых форматов
+
+## Ключевые экраны приложения
+### Главный экран
+<img width="1235" height="770" alt="image" src="https://github.com/user-attachments/assets/f3b5f29c-4de3-4d70-be56-bf4578bfd507" />
+
+### Экран загрузки документа
+<img width="1231" height="775" alt="image" src="https://github.com/user-attachments/assets/e1f63386-2ff0-4801-a4a5-7a4d4103ceb8" />
+
+### Экран сравнения до / после
+<img width="1237" height="784" alt="image" src="https://github.com/user-attachments/assets/1611f620-9665-4aa0-95fe-293a1309e49c" />
