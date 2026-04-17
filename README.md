@@ -43,6 +43,7 @@
 - Загрузить ТЗ в систему
 - Получить указания на проблемы
 - Получить оценку критичности проблем
+- Получить описание проблем
 - Получить рекомендации по исправлению проблем
 - Исправить проблемы вручную не выходя из системы
 - Связаться с поддержкой
@@ -123,6 +124,7 @@
 - Получить оценку критичности проблем
 - Получить рекомендации по исправлению проблем
 - Получить общую оценку качества
+- Получить описание проблем
 - Исправить проблемы автоматически не выходя из системы
 #### Контроль доступа
 - Предоставить подчиненным доступ к системе
@@ -144,7 +146,7 @@
 - Интеграция - Integration
 - История проверок - TSAnalysisStory
 - Проблема - Issue
-- Критичность проблемы - IssueImportance
+- Критичность проблемы (Высокая, Средняя, Низкая) - IssueImportance (High, Medium, Low)
 - Рекомендация по исправлению проблемы - IssueRecommendation
 - Оченка качества - QualityScore
 - Подчиненный - User
@@ -163,15 +165,16 @@
 ### ✅ Успешный сценарий
 #### Дано
 - Пользователь открыл приложение
-- У пользователя есть файл ТЗ в поддерживаемом формате (PDF, DOCS...)
+- У пользователя есть файл ТЗ в поддерживаемом формате (PDF, DOCX...)
 #### Когда
 - Пользователь выбирает нужный файл в проводнике
 - Пользователь нажимает "Загрузить ТЗ"
 #### Тогда
 - Закрывается окно проводника
 - Система создает рабочую копию файла
-- Система запускает анализ ТЗ
+- Система отправляет ТЗ на анализ на application-сервер
 - Система отображает progress bar
+- Система получает результат анализа ТЗ
 - Система показывает указание на проблемы
 ### ❌ Неуспешный сценарий
 #### Дано
@@ -186,10 +189,151 @@
 
 ## Ключевые экраны приложения
 ### Главный экран
-<img width="1235" height="770" alt="image" src="https://github.com/user-attachments/assets/f3b5f29c-4de3-4d70-be56-bf4578bfd507" />
+<img width="1221" height="768" alt="image" src="https://github.com/user-attachments/assets/235d8310-581e-45ca-9a5e-3f573fcf3554" />
 
 ### Экран загрузки документа
 <img width="1231" height="775" alt="image" src="https://github.com/user-attachments/assets/e1f63386-2ff0-4801-a4a5-7a4d4103ceb8" />
 
 ### Экран сравнения до / после
 <img width="1237" height="784" alt="image" src="https://github.com/user-attachments/assets/1611f620-9665-4aa0-95fe-293a1309e49c" />
+
+## API
+### Отправить ТЗ на анализ
+Запрос
+```
+POST /v1/tsanalyses
+Content-type: multipart/form-data
+
+file = tech_spec.docx
+```
+Ответы:
+- 202
+  ```
+  {
+    "tsanalysis_id": "123",
+    "status": "processing",
+    "message": "Принято для обработки"
+  }
+  ```
+- 400
+  ```
+  {
+    "error_type": "bad_request_error",
+    "message": "Некорректный запрос"
+  }
+  ```
+- 401
+  ```
+  {
+    "error_type": "unauthorized_error",
+    "message": "Пользователь не авторизован"
+  }
+  ```
+- 413
+  ```
+  {
+    "error_type": "payload_too_large_error",
+    "message": "Превышен максимальный размер файла"
+  }
+  ```
+- 415
+  ```
+  {
+    "error_type": "unsupported_media_type_error",
+    "message": "Неподдерживаемый формат файла"
+  }
+  ```
+- 422
+  ```
+  {
+    "error_type": "unprocessable_entity_error",
+    "message": "Не удалось обработать тело файла"
+  }
+  ```
+- 500
+  ```
+  {
+    "error_type": "internal_server_error",
+    "message": "Не удалось обработать запрос"
+  }
+  ```
+### Получить результат анализа ТЗ
+Запрос
+```
+GET /v1/tsanalyses/tsanalysis_id
+```
+Ответы:
+- 200 - Если проверка завершена
+  ```
+  {
+    "tsanalysis_id": "123",
+    "status": "done",
+    "message": "Обработано",
+    "summary":
+    {
+      "total": "good",
+      "low_issues": 5,
+      "medium_issues": 3,
+      "high_issues": 1
+    }
+    "issues": [
+      {
+        "issue_id": "123",
+        "issue_type": "some_type",
+        "importance": "high",
+        "location":
+        {
+          "char_start": 100,
+          "char_end": 110,
+          "fragment": "some issue"
+        },
+        "description": "something bad",
+        "recommendation": "do something to become better"
+      }
+      ...
+    ]
+  }
+  ```
+- 202 - Если проверка еще идет
+  ```
+  {
+    "tsanalysis_id": "123",
+    "status": "processing",
+    "message": "В обработке"
+  }
+  ```
+- 400
+  ```
+  {
+    "error_type": "bad_request_error",
+    "message": "Некорректный запрос"
+  }
+  ```
+- 401
+  ```
+  {
+    "error_type": "unauthorized_error",
+    "message": "Пользователь не авторизован"
+  }
+  ```
+- 403
+  ```
+  {
+    "error_type": "forbidden_error",
+    "message": "Доступ запрещен"
+  }
+  ```
+- 404
+  ```
+  {
+    "error_type": "not_found_error",
+    "message": "Результат анализа ТЗ с id 123 не найден"
+  }
+  ```
+- 500
+  ```
+  {
+    "error_type": "internal_server_error",
+    "message": "Не удалось обработать запрос"
+  }
+  ```
