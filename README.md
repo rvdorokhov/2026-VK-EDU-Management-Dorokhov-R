@@ -345,8 +345,10 @@ GET /v1/tsanalyses/tsanalysis_id
 ## C4 
 ### Level 1
 <img width="1442" height="1083" alt="Lean Canvas Template" src="https://github.com/user-attachments/assets/43941815-76a6-4792-bc91-e37561716bbc" />
+
 ### Level 2
 <img width="1294" height="1206" alt="Lean Canvas Template (2)" src="https://github.com/user-attachments/assets/b0359c3b-ab5e-4bc1-b2f3-fdbfa4bd8b2b" />
+
 ### Стек технологий
 - React - популярный выбор для разработки пользовательских интерфейсов
 - Electron - даёт возможность собрать десктопное приложение на базе веб-технологии React
