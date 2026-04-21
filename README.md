@@ -342,3 +342,19 @@ GET /v1/tsanalyses/tsanalysis_id
     "message": "Не удалось обработать запрос"
   }
   ```
+## C4 
+### Level 1
+<img width="1442" height="1083" alt="Lean Canvas Template" src="https://github.com/user-attachments/assets/43941815-76a6-4792-bc91-e37561716bbc" />
+### Level 2
+<img width="1294" height="1206" alt="Lean Canvas Template (2)" src="https://github.com/user-attachments/assets/b0359c3b-ab5e-4bc1-b2f3-fdbfa4bd8b2b" />
+### Стек технологий
+- React - популярный выбор для разработки пользовательских интерфейсов
+- Electron - даёт возможность собрать десктопное приложение на базе веб-технологии React
+- NGINX - проксирование, балансировка, фильтрация
+- Python - для быстрой разработки MVP благодаря простоте и богатым библиотекам (можно использовать Gunicorn + FastAPI для большей эффективности)
+- Go - лучший выбор для хайлоада
+- PostgreSQL - надежное хранение данных
+- S3 - эффективное хранение медиа
+- Redis - кеширование (например, для шаблонов)
+- ЮKassa - безопсная обработка онлайн-платежей "на стороне"
+- Почтовый сервис - отправка уведомлений
